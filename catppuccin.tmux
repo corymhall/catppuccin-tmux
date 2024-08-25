@@ -102,9 +102,11 @@ main() {
   add_tmux_batch_option "@catppuccin_status_left_separator"
   add_tmux_batch_option "@catppuccin_status_right_separator"
   add_tmux_batch_option "@catppuccin_status_connect_separator"
+  add_tmux_batch_option "@catppuccin_status_left_left_separator"
   add_tmux_batch_option "@catppuccin_status_fill"
   add_tmux_batch_option "@catppuccin_status_modules_left"
   add_tmux_batch_option "@catppuccin_status_modules_right"
+  add_tmux_batch_option "@catppuccin_window_connect_separator"
 
   run_tmux_batch_commands
 
@@ -174,10 +176,12 @@ main() {
   # window
   local window_status_separator window_left_separator window_right_separator \
     window_middle_separator window_number_position window_status_enable \
-    window_format window_current_format
+    window_format window_current_format window_connect_separator
 
   window_status_separator=$(get_interpolated_tmux_batch_option "@catppuccin_window_separator" "")
   setw window-status-separator "$window_status_separator"
+
+  window_connect_separator=$(get_tmux_option "@catppuccin_window_connect_separator" "yes")
 
   window_left_separator=$(get_tmux_batch_option "@catppuccin_window_left_separator" "█")
   window_right_separator=$(get_tmux_batch_option "@catppuccin_window_right_separator" "█")
@@ -197,18 +201,19 @@ main() {
 
   # status module
   local status_left_separator status_right_separator status_connect_separator \
-    status_fill status_modules_left status_modules_right
+    status_fill status_modules_left status_modules_right status_left_left_separator
   status_left_separator=$(get_tmux_batch_option "@catppuccin_status_left_separator" "")
   status_right_separator=$(get_tmux_batch_option "@catppuccin_status_right_separator" "█")
   status_connect_separator=$(get_tmux_batch_option "@catppuccin_status_connect_separator" "yes")
+  status_left_left_separator=$(get_tmux_batch_option "@catppuccin_status_left_left_separator" "no")
   status_fill=$(get_tmux_batch_option "@catppuccin_status_fill" "icon")
 
   status_modules_left=$(get_tmux_batch_option "@catppuccin_status_modules_left" "")
-  loaded_modules_left=$(load_modules "$status_modules_left" "$modules_custom_path" "$modules_status_path")
+  loaded_modules_left=$(load_modules "$status_modules_left" "left" "$modules_custom_path" "$modules_status_path")
   set status-left "$(do_color_interpolation "$loaded_modules_left")"
 
   status_modules_right=$(get_tmux_batch_option "@catppuccin_status_modules_right" "application session")
-  loaded_modules_right=$(load_modules "$status_modules_right" "$modules_custom_path" "$modules_status_path")
+  loaded_modules_right=$(load_modules "$status_modules_right" "right" "$modules_custom_path" "$modules_status_path")
   set status-right "$(do_color_interpolation "$loaded_modules_right")"
 
   # modes

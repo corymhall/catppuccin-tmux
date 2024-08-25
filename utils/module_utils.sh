@@ -3,6 +3,8 @@
 load_modules() {
   local modules_list=$1
   shift
+  local module_position=$1
+  shift
   local module_directories=("$@")
 
   local -i module_index=0;
@@ -27,7 +29,7 @@ load_modules() {
       if [ -r "$module_path" ]; then
         # shellcheck source=/dev/null
         source "$module_path"
-        loaded_modules="$loaded_modules$( "show_$module_name" "$module_index" )"
+        loaded_modules="$loaded_modules$( "show_$module_name" "$module_index" "$module_position" )"
         module_index+=1
         continue 2
       fi
